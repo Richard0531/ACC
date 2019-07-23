@@ -170,7 +170,7 @@ Classify gene fusion pairs into different groups according to frequency and prob
     clf = classifiers[1]
     clf.fit(X, y)
  
-### 10. make SVM classification scatter plot
+### 10. Make SVM classification scatter plot
     def make_meshgrid(x, y, h=0.2):
         x_min, x_max = x.min() -1, x.max() +1
         y_min, y_max = y.min() - 1, y.max() + 1
