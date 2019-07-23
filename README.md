@@ -2,7 +2,7 @@ Link-prediction gene list classification
 ===================================  
 
 
-Classify gene fusion pairs into different groups according to frequency and proabality.
+Classify gene fusion pairs into different groups according to frequency and probability
 -----------------------------------
 
 
@@ -86,10 +86,62 @@ Classify gene fusion pairs into different groups according to frequency and proa
     bot_gene_values = list(bottom_genes.keys())
     top_gene_values = list(top_genes.keys())
           
-### 多行文本框    
-    这是一个有多行的文本框  
-    你可以写入代码等,每行文字只要输入两个Tab再输入文字即可  
-    这里你可以输入一段代码  
+### 6. Calculate the fusion probability of genes
+    top_gene_values_max = max(list(top_genes.values()))
+    max_key = [key for key, value in top_genes.items() if value == top_gene_values_max]
+    print(max_key[0])
+
+    max_key_index = top_gene_values.index(max_key[0])
+    print(max_key_index)
+
+    all_gene = list(bottom_genes.keys()) + list(top_genes.keys())
+    def find_probabilities(dictionary, index):
+        dictionary_keys = list(dictionary.keys())   
+        probabilities = []
+        for item in dictionary_keys:
+            indexes = df.loc[df[id_value] == item].index
+            probabilities.append(df.loc[indexes[index]]["prediction"])
+        return probabilities
+    low_freq_prob = find_probabilities(bottom_genes, 0)
+    high_freq_prob = find_probabilities(top_genes, 0)
+    print(len(low_freq_prob))
+    print(len(high_freq_prob))
+
+    probabilities = low_freq_prob + high_freq_prob
+    print(len(probabilities))
+    frequencies = list(bottom_genes.values()) + list(top_genes.values())
+    print(len(frequencies))
+
+    probabilities_sorted = sorted(probabilities, reverse=True)
+    indeces = []
+    for i in range(0, 15):
+        indeces.append(probabilities.index(probabilities_sorted[i]))
+    frequencies_sorted = sorted(frequencies, reverse=True)
+    indece_s = []
+    for i in range(0, 20):
+        indece_s.append(frequencies.index(frequencies_sorted[i]))
   
-### 比如我们可以在多行文本框里输入一段代码,来一个Java版本的HelloWorld吧  
+ ### 7. Genes are divided into high frequency groups and high probability groups
+    desired_freq_values = []
+    desired_prob_values = []
+
+    for i in range(0, len(frequencies)):
+	if(frequencies[i] >= 11):
+		desired_freq_values.append(i)
+	if(probabilities[i] >= .55):
+		desired_prob_values.append(i)
+    print(desired_prob_values)
+    print(desired_freq_values)
+ 
+ ### 8. Genes are divided into four groups according to the median of probability and frequency
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
