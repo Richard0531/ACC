@@ -133,12 +133,73 @@ Classify gene fusion pairs into different groups according to frequency and prob
     print(desired_prob_values)
     print(desired_freq_values)
  
- ### 8. Genes are divided into four groups according to the median of probability and frequency
+### 8. Genes are divided into four groups according to the median of probability and frequency
+    median = np.median(probabilities_sorted)
+
+    y = []
+    for i in range(0, len(frequencies)):
+        if probabilities[i] >= median and frequencies[i] <= 6: 
+            y.append(0) # This is high prob low freq group
+        elif probabilities[i] >= median and frequencies[i] > 6:
+            y.append(1) # This is high prob high freq group
+        elif probabilities[i] < median and frequencies[i] <= 6: 
+            y.append(2) # This is low prob low freq group
+        elif probabilities[i] < median and frequencies[i] > 6: 
+            y.append(3) # This is low prob high freq group
+
+    X = np.array([probabilities, frequencies])
+    X = np.transpose(X)
+    print(X.shape)
+    print(y.shape)
  
+### 9. Train the model for the classifier algorithm
+    X_train = [list(np.random.rand(len(X)))]
+    X_train_freq = list(np.random.randint(1, 3, size=len(list(bottom_genes.values())))) + list(np.random.randint(12, 30,     size=len(list(top_genes.values()))))
+
+    y_results = list((np.zeros(len(low_freq_prob), dtype=int))) + list(np.random.randint(1,2, size=len(high_freq_prob)))
+
+
+    h = 0.2
+    names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Decision Tree", "Random Forest", "AdaBoost",
+    "Naive Bayes", "LDA", "QDA"]
+    classifiers = [
+    KNeighborsClassifier(2), svm.SVC(kernel="linear"), svm.SVC(gamma=2, C=1), DecisionTreeClassifier(max_depth=5),
+    RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1), AdaBoostClassifier(), GaussianNB(),
+    LDA(), QDA()]
+
+    clf = classifiers[1]
+    clf.fit(X, y)
  
- 
- 
- 
+### 10. make SVM classification scatter plot
+    def make_meshgrid(x, y, h=0.2):
+        x_min, x_max = x.min() -1, x.max() +1
+        y_min, y_max = y.min() - 1, y.max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+        return xx, yy
+    def plot_contours(ax, clf, xx, yy, **params):
+        Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+        Z = Z.reshape(xx.shape)
+        out = ax.contourf(xx, yy, Z, **params)
+    title = ('SVM')
+    fig, ax = plt.subplots()
+    X0 = X[:,0]
+    X1 = X[:,1]
+    xx, yy = make_meshgrid(X0, X1)
+    plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=1)
+    ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+    ax.set_ylabel('frequency')
+    ax.set_xlabel('probability')
+    ax.set_xticks(())
+    ax.set_yticks(())
+    ax.set_title(title)
+    ax.legend()
+    for i in range(0, len(desired_prob_values)):
+        ax.annotate(all_gene[desired_prob_values[i]], xy=(X0[desired_prob_values[i]], X1[desired_prob_values[i]]),
+            xytext=(X0[desired_prob_values[i]], X1[desired_prob_values[i]]), fontsize=12)
+    for i in range(0, len(desired_freq_values)):
+        ax.annotate(all_gene[desired_freq_values[i]], xy=(X0[desired_freq_values[i]], X1[desired_freq_values[i]]),
+            xytext=(X0[desired_freq_values[i]], X1[desired_freq_values[i]]), fontsize=12)
+    plt.show()
  
  
  
