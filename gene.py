@@ -2,8 +2,10 @@
 """
 Created on Wed Jul 10 15:19:28 2019
 
-@author: USER
+@author: Richard
 """
+
+###Just the test
 
 import pandas as pd
 import numpy as np
