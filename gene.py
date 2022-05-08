@@ -2,7 +2,8 @@
 """
 Created on Wed Jul 10 15:19:28 2019
 
-@author: USER
+@author: Richard
+This is gene fusion prodiction analysis
 """
 
 import pandas as pd
@@ -231,3 +232,20 @@ for i in range(0, len(desired_freq_values)):
 	ax.annotate(all_gene[desired_freq_values[i]], xy=(X0[desired_freq_values[i]], X1[desired_freq_values[i]]),
 		xytext=(X0[desired_freq_values[i]], X1[desired_freq_values[i]]), fontsize=12)
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
